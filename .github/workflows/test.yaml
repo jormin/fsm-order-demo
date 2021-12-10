@@ -1,0 +1,25 @@
+name: test
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+jobs:
+  test:
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
+        go: ["1.16"]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.go }}
+
+      - run: go test ./... -v -cover -coverprofile coverage.out
+      - run: go test ./... -v -bench -benchmem
+
+      - uses: codecov/codecov-action@v1
