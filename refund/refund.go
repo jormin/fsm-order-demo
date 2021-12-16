@@ -17,8 +17,6 @@ import (
 // | 退款中 | 6    | 退款完成: 已完成                                             |
 // | 已完成 | 7    | 无                                                           |
 
-var sm *fsmorderdemo.StateMachine
-
 const (
 	// StateWaitApprove 待审批
 	StateWaitApprove = iota
@@ -127,16 +125,14 @@ var transitions = map[fsmorderdemo.State]map[fsmorderdemo.Event]fsmorderdemo.Tra
 
 // NewStateMachine 生成状态机
 func NewStateMachine() *fsmorderdemo.StateMachine {
-	if sm == nil {
-		sm = &fsmorderdemo.StateMachine{
-			Processor: &processor.EventProcessor{},
-			Graph:     &fsmorderdemo.StateGraph{},
-		}
-		sm.SetName("退款状态图表")
-		sm.SetStart(StateWaitApprove)
-		sm.SetEnd(StateCompleted)
-		sm.SetStates(StateDesc)
-		sm.SetTransitions(transitions)
+	sm := &fsmorderdemo.StateMachine{
+		Processor: &processor.EventProcessor{},
+		Graph:     &fsmorderdemo.StateGraph{},
 	}
+	sm.SetName("退款状态图表")
+	sm.SetStart(StateWaitApprove)
+	sm.SetEnd(StateCompleted)
+	sm.SetStates(StateDesc)
+	sm.SetTransitions(transitions)
 	return sm
 }

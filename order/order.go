@@ -18,8 +18,6 @@ import (
 // | 售后中-退货退款 | 7    | 取消售后: 已签收; 退款完成: 已完成              |
 // | 已完成          | 8    | 无                                              |
 
-var sm *fsmorderdemo.StateMachine
-
 const (
 	// StateWaitPay 待支付
 	StateWaitPay = iota
@@ -156,16 +154,14 @@ var transitions = map[fsmorderdemo.State]map[fsmorderdemo.Event]fsmorderdemo.Tra
 
 // NewStateMachine 生成状态机
 func NewStateMachine() *fsmorderdemo.StateMachine {
-	if sm == nil {
-		sm = &fsmorderdemo.StateMachine{
-			Processor: &processor.EventProcessor{},
-			Graph:     &fsmorderdemo.StateGraph{},
-		}
-		sm.SetName("子订单状态图表")
-		sm.SetStart(StateWaitPay)
-		sm.SetEnd(StateCompleted)
-		sm.SetStates(StateDesc)
-		sm.SetTransitions(transitions)
+	sm := &fsmorderdemo.StateMachine{
+		Processor: &processor.EventProcessor{},
+		Graph:     &fsmorderdemo.StateGraph{},
 	}
+	sm.SetName("子订单状态图表")
+	sm.SetStart(StateWaitPay)
+	sm.SetEnd(StateCompleted)
+	sm.SetStates(StateDesc)
+	sm.SetTransitions(transitions)
 	return sm
 }
